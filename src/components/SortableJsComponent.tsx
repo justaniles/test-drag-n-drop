@@ -19,6 +19,11 @@ export const SortableJsComponent: React.FC<ISortableListParams> = ({
     if (listRefCurrent) {
       const sortable = Sortable.create(listRefCurrent, {
         animation: 150,
+        delay: 500,
+        delayOnTouchOnly: true,
+        onStart: () => {
+          window.navigator.vibrate?.(100);
+        },
         onEnd: ({ oldIndex, newIndex }) => {
           const callback = onSortEndRef.current;
           if (!callback || oldIndex === undefined || newIndex === undefined) {
