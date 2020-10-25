@@ -49,7 +49,7 @@ export const DraggableJsComponent: React.FC<ISortableListParams> = ({
     <ol className="list" ref={listRef}>
       {items.map(({ displayName, key }) => (
         <li className="list-item" key={key}>
-          <div className="item">{displayName}</div>
+          <div className="item draggablejs-item">{displayName}</div>
         </li>
       ))}
     </ol>

@@ -1,12 +1,11 @@
-import './App.css';
+import './App.scss';
 import React, { useCallback, useState } from 'react';
 import { SortableJsComponent, DraggableJsComponent } from './components';
 import { IItem, ISortEvent } from './types';
 
-let uniqueId = 0;
+const itemCount = 50;
 
-function createItem(): IItem {
-  const id = uniqueId++;
+function createItem(id: number): IItem {
   return {
     key: '' + id,
     displayName: `Item ${id}`,
@@ -20,10 +19,11 @@ function App() {
   const [currentView, setCurrentView] = useState<'SortableJS' | 'DraggableJS'>(
     views[0]
   );
+
   const [items, setItems] = useState<IItem[]>(() => {
     const initialItems: IItem[] = [];
-    for (let i = 0; i < 5; i++) {
-      initialItems.push(createItem());
+    for (let i = 0; i < itemCount; i++) {
+      initialItems.push(createItem(i));
     }
     return initialItems;
   });
@@ -49,7 +49,7 @@ function App() {
   );
 
   const onAddItem = useCallback(() => {
-    setItems([...items, createItem()]);
+    setItems([...items, createItem(items.length)]);
   }, [items, setItems]);
 
   const onSwitchView = useCallback(() => {
@@ -70,21 +70,23 @@ function App() {
 
   return (
     <div className="App">
-      <header className="app-header">{currentView}</header>
+      <header className="app-header">
+        <h1 className="app-header-current-view">{currentView}</h1>
+        <div className="app-header-right">
+          <button className="button" onClick={onSwitchView}>
+            Switch view
+          </button>
+          <button className="button" onClick={onAddItem}>
+            Add item
+          </button>
+        </div>
+      </header>
       {currentView === 'SortableJS' && (
         <SortableJsComponent items={items} onSortEnd={onSortEnd} />
       )}
       {currentView === 'DraggableJS' && (
         <DraggableJsComponent items={items} onSortEnd={onSortEnd} />
       )}
-      <div className="footer">
-        <button className="footer-button" onClick={onSwitchView}>
-          Switch view
-        </button>
-        <button className="footer-button" onClick={onAddItem}>
-          Add item
-        </button>
-      </div>
     </div>
   );
 }
